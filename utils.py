@@ -162,7 +162,8 @@ def make_prediction(model, file_path, word_to_ix, output_file):
     df, data = read_data(file_path)
     results = {}
     for i in range(17):
-        results[i] = [0] * len(data[LABEL_START])
+        results[i] = [0] * len(df[LABEL_START])
+    print(len(df[LABEL_START]))
     prediction = predict(model, data, word_to_ix)
     idx = 0
     for pred in prediction:
@@ -170,12 +171,31 @@ def make_prediction(model, file_path, word_to_ix, output_file):
         idx += 1
     
     for i in range(LABEL_START, LABEL_END+1):
-        data[i] = results[i]
-    columns = range(0, 33)
-    for c in range(17):
-        columns[LABEL_START+c] = label[c]
-    data.columns = columns
-    data.to_excel(output_file, index=False)
+        data[i] = results[i-LABEL_START]
+    
+    # add columns
+    columns = [None]*33
+    for c in range(0, 17):
+        columns[c + LABEL_START] = label[c]
+    df.columns = columns
+    print('write results')
+    df.to_excel(output_file, index=False)
+    
+def predict(model, test_exs, word_to_ix):
+    pred = []
+    for example in test_exs:
+        words = embed_word(word_to_ix, example.words)
+        pred.append(model.predict(words))
+    return pred
+
+def embed_word(to_ix, sent):
+    embed = []
+    context = sent.split()
+    for c in context:
+        if c in to_ix.keys():
+            embed.append(to_ix[c])
+    inp = torch.tensor(embed, dtype=torch.long).unsqueeze(0)
+    return inp
 
 def read_data(file_path):
     df = pd.read_excel(file_path, header=None)

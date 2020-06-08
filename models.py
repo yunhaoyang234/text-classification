@@ -109,7 +109,7 @@ class LSTM(nn.Module):
 '''
 training and prediction
 '''
-def train_model(training_data, vectors, lr=0.1, epochs=30, EMBEDDING_DIM=32, HIDDEN_DIM=32, LAYER_SIZE=3, OUTPUT_SIZE=17, word_to_ix=None):
+def train_model(training_data, vectors, lr=0.1, epochs=8, EMBEDDING_DIM=32, HIDDEN_DIM=32, LAYER_SIZE=1, OUTPUT_SIZE=17, word_to_ix=None):
     if len(vectors) > 0:
         EMBEDDING_DIM = len(vectors[0])
     model = LSTM(vectors, EMBEDDING_DIM, HIDDEN_DIM, len(word_to_ix), OUTPUT_SIZE, LAYER_SIZE)
@@ -117,6 +117,7 @@ def train_model(training_data, vectors, lr=0.1, epochs=30, EMBEDDING_DIM=32, HID
     optimizer = optim.SGD(model.parameters(), lr=lr)
     
     for epoch in range(epochs):
+        print(epoch)
         for example in training_data:
             model.zero_grad()
 
