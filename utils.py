@@ -165,13 +165,14 @@ def make_prediction(model, file_path, word_to_ix, output_file):
         results[i] = [0] * len(df[LABEL_START])
     print(len(df[LABEL_START]))
     prediction = predict(model, data, word_to_ix)
+    print(len(prediction))
     idx = 0
     for pred in prediction:
         results[pred][idx] = 1
         idx += 1
-    
+
     for i in range(LABEL_START, LABEL_END+1):
-        data[i] = results[i-LABEL_START]
+        df[i] = results[i-LABEL_START]
     
     # add columns
     columns = [None]*33

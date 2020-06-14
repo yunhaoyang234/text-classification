@@ -30,8 +30,8 @@ print('load embedding')
 word_map, to_ix = load_embeddings()
 
 print('train model')
-param = {'size': 10, 'window': 5, 'lr': 0.1,'epoch': 12, 'hidden_dim': 25, 'layer_size': 1}
-cross_val(3, param, train_exs, 17, metric=[3,5,7,14], word_map=word_map, word_to_ix=to_ix)
+param = {'size': 10, 'window': 5, 'lr': 0.1,'epoch': 11, 'hidden_dim': 25, 'layer_size': 1}
+cross_val(3, param, train_exs, 17, metric=range(17), word_map=word_map, word_to_ix=to_ix)
 
 word_vectors=list(word_map.values())
 model = train_model(train_exs, word_vectors, lr=param['lr'], epochs=param['epoch'],
