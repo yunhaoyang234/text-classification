@@ -105,6 +105,16 @@ class LSTM(nn.Module):
             output, state = self.lstm.forward(inp, state)
         output = self.softmax(self.hidden2tag(output)[0])
         return np.argmax(output[0].tolist())
+    
+    def latent(self, inpu):
+        embedded_input = self.word_embeddings(inpu)
+        state = (torch.zeros(self.num_layers * 2, 1, self.hidden_size),
+                 torch.zeros(self.num_layers * 2, 1, self.hidden_size))
+        output = None
+        for inp in embedded_input[0]:
+            inp = torch.tensor([[inp.tolist()]])
+            output, state = self.lstm.forward(inp, state)
+        return output[0][0].tolist()
 
 '''
 training and prediction

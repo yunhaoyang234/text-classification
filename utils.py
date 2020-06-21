@@ -9,6 +9,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from nltk.tokenize import sent_tokenize, word_tokenize
+from typing import List
+import numpy as np
+import scipy as sp
+from sklearn import cluster
 
 
 label = ['配置客户端', '配置客户端(PC)', '账号',
@@ -202,3 +206,21 @@ def read_data(file_path):
     df = pd.read_excel(file_path, header=None)
     data = get_train_exs(df[31], df[32], [0]*len(df[31]))
     return df, data
+
+'''
+Clustering
+'''
+def cluster_latent(points: List[List[float]], num_cluster: int):
+    n_clusters = num_cluster 
+    np.random.seed(0)
+  
+    inner_size = len(points[0])
+    X = np.reshape(points,(-1, inner_size))
+
+    k_means = cluster.KMeans(n_clusters=n_clusters, n_init= 8)
+    k_means.fit(X)
+    values = k_means.cluster_centers_.squeeze()
+    labels = k_means.labels_
+    centroids = k_means.cluster_centers_
+
+    return labels.tolist(), centroids.tolist()
