@@ -1,6 +1,7 @@
 # Customer Service Text Classification
 
 #Prerequisites
+
 torch version 1.5.0+cu101
 pandas version 1.0.4
 gensim 3.6.0
