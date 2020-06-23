@@ -67,6 +67,14 @@ def get_train_exs(col1, col2, labels):
             train_exs.append(Example(ex, labels[i]))
     return train_exs
 
+
+def get_data_by_label(train_exs, label):
+    label_data = []
+    for exs in train_exs:
+        if exs.label == label:
+            label_data.append(exs)
+    return label_data
+
 # split important and unimportant data records
 # return two lists of Examples [Example]
 def split_data(col1, col2, labels):
